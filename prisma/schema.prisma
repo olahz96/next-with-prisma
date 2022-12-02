@@ -25,7 +25,7 @@ model Goal {
   name        String
   description String   @db.VarChar(255)
   priority    Priority
-  User        User?    @relation(fields: [userId], references: [id])
+  user        User?    @relation(fields: [userId], references: [id])
   userId      Int?     @map("user_id")
 
   @@map("goal")
