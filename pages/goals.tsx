@@ -16,14 +16,16 @@ const Goals: NextPage<GoalsProps> = ({ goals }) => {
 
   const handleDelete = useCallback(async (goalId: number) => {
     try {
-      await fetch(`/api/goals/${goalId}`, {
+      const res = await fetch(`/api/goals/${goalId}`, {
         method: 'DELETE',
         headers: {
-          Accept: 'application/json',
           'Content-Type': 'application/json'
         }
       })
-      router.replace(router.asPath)
+
+      if (res.ok) {
+        router.replace(router.asPath)
+      }
     } catch (e) {
       console.error(e)
     }
@@ -41,7 +43,7 @@ const Goals: NextPage<GoalsProps> = ({ goals }) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/goals`)
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/goals`)
   const data = await response.json()
 
   return {

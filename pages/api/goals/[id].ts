@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import prisma from '../../../config/prismaClient'
+import { prisma } from '../../../config/prismaClient'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const goalId = parseInt(req.query.id as string)
@@ -11,18 +11,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     res.status(200).json(goal)
   } else if (req.method === 'PUT') {
+    const { name, description, priority } = req.body
     const goal = await prisma.goal.update({
       where: { id: goalId },
-      data: { name: req.body.name, description: req.body.description, priority: req.body.priority }
+      data: { name, description, priority }
     })
 
     res.status(200).json(goal)
   } else if (req.method === 'DELETE') {
-    const result = await prisma.goal.delete({
+    await prisma.goal.delete({
       where: { id: goalId }
     })
-
-    console.log(result)
 
     res.status(200).json({ message: 'Goal was successfully deleted' })
   } else {
